@@ -1,4 +1,4 @@
-/*! steroids-js - v3.5.11 - 2015-05-25 17:12 */
+/*! steroids-js - v3.5.12 - 2015-06-23 13:00 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -1357,6 +1357,42 @@ DrawerCollection = (function(_super) {
       })
     };
   }
+
+  DrawerCollection.prototype.enable = function(options, callbacks) {
+    var parameters;
+    if (options == null) {
+      options = {};
+    }
+    if (callbacks == null) {
+      callbacks = {};
+    }
+    parameters = {};
+    parameters.side = options.side;
+    return steroids.nativeBridge.nativeCall({
+      method: "enableDrawer",
+      parameters: parameters,
+      successCallbacks: [callbacks.onSuccess],
+      failureCallbacks: [callbacks.onFailure]
+    });
+  };
+
+  DrawerCollection.prototype.disable = function(options, callbacks) {
+    var parameters;
+    if (options == null) {
+      options = {};
+    }
+    if (callbacks == null) {
+      callbacks = {};
+    }
+    parameters = {};
+    parameters.side = options.side;
+    return steroids.nativeBridge.nativeCall({
+      method: "disableDrawer",
+      parameters: parameters,
+      successCallbacks: [callbacks.onSuccess],
+      failureCallbacks: [callbacks.onFailure]
+    });
+  };
 
   DrawerCollection.prototype.hide = function(options, callbacks) {
     var parameters;
@@ -3870,7 +3906,7 @@ PostMessage = (function() {
 ;var _this = this;
 
 window.steroids = {
-  version: "3.5.11",
+  version: "3.5.12",
   Animation: Animation,
   File: File,
   views: {
