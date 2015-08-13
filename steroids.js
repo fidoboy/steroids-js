@@ -1,4 +1,4 @@
-/*! steroids-js - v3.5.12 - 2015-06-23 13:00 */
+/*! steroids-js - v3.5.13 - 2015-08-13 16:23 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -12,7 +12,7 @@ Bridge = (function() {
 
   Bridge.getBestNativeBridge = function() {
     var bridgeClass, prioritizedList, _i, _len;
-    prioritizedList = [FreshAndroidBridge, TizenBridge, WebBridge, AndroidBridge, WebsocketBridge, JSCoreBridge];
+    prioritizedList = [FreshAndroidBridge, ModuleBridge, TizenBridge, WebBridge, AndroidBridge, WebsocketBridge, JSCoreBridge];
     if (this.bestNativeBridge == null) {
       for (_i = 0, _len = prioritizedList.length; _i < _len; _i++) {
         bridgeClass = prioritizedList[_i];
@@ -204,6 +204,68 @@ FreshAndroidBridge = (function(_super) {
   };
 
   return FreshAndroidBridge;
+
+})(Bridge);
+;var ModuleBridge,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+ModuleBridge = (function(_super) {
+  __extends(ModuleBridge, _super);
+
+  function ModuleBridge() {
+    window.AG_SCREEN_ID = 0;
+    window.AG_LAYER_ID = 0;
+    window.AG_VIEW_ID = 0;
+    return this;
+  }
+
+  ModuleBridge.isUsable = function() {
+    return /gyver\.com$/.test(location.hostname);
+  };
+
+  ModuleBridge.prototype.sendMessageToNative = function(messageString) {
+    var failSilentlyMethods, failed, failureOptions, message, successOptions, _ref;
+    message = JSON.parse(messageString);
+    console.log("ModuleBridge: ", message);
+    failed = false;
+    successOptions = {};
+    failureOptions = {};
+    failSilentlyMethods = ["userFilesPath", "getApplicationPath", "getEndpointURL", "addEventListener", "broadcastJavascript", "getApplicationState"];
+    switch (message.method) {
+      case "ping":
+        successOptions.message = "PONG";
+        break;
+      case "popLayer":
+        window.history.back();
+        break;
+      case "openLayer":
+        window.location.href = message.parameters.url;
+        break;
+      case "openURL":
+        window.open(message.parameters.url, "_blank");
+        break;
+      case "openModal":
+        steroids.component.helper.openModal(message.parameters.url, {});
+        break;
+      case "closeModal":
+        steroids.component.helper.closeModal();
+        break;
+      default:
+        if (_ref = message.method, __indexOf.call(failSilentlyMethods, _ref) < 0) {
+          console.log("ModuleBridge: unsupported API method: " + message.method);
+        }
+        failed = true;
+    }
+    if (failed) {
+
+    } else {
+      return this.callbacks[message.callbacks.success].call(this, successOptions);
+    }
+  };
+
+  return ModuleBridge;
 
 })(Bridge);
 ;var AndroidBridge,
@@ -3871,15 +3933,26 @@ Keyboard = (function(_super) {
   return Keyboard;
 
 })(EventsSupport);
-;var PostMessage;
+;var PostMessage,
+  __slice = [].slice;
 
 PostMessage = (function() {
   function PostMessage() {}
 
+  PostMessage.originalPostMessage = (function(win) {
+    var original;
+    original = win.postMessage;
+    return function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return original.apply(win, args);
+    };
+  })(window);
+
   PostMessage.postMessage = function(message, targetOrigin) {
     var escapedJSONMessage;
     escapedJSONMessage = escape(JSON.stringify(message));
-    return steroids.nativeBridge.nativeCall({
+    steroids.nativeBridge.nativeCall({
       method: "broadcastJavascript",
       parameters: {
         javascript: "steroids.PostMessage.dispatchMessageEvent('" + escapedJSONMessage + "', '*');"
@@ -3888,6 +3961,7 @@ PostMessage = (function() {
       failureCallbacks: [],
       recurringCallbacks: []
     });
+    return PostMessage.originalPostMessage(message, targetOrigin);
   };
 
   PostMessage.dispatchMessageEvent = function(escapedJSONMessage, targetOrigin) {
@@ -3906,7 +3980,7 @@ PostMessage = (function() {
 ;var _this = this;
 
 window.steroids = {
-  version: "3.5.12",
+  version: "3.5.13",
   Animation: Animation,
   File: File,
   views: {
