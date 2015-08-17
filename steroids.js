@@ -1,4 +1,4 @@
-/*! steroids-js - v3.5.13 - 2015-08-13 16:23 */
+/*! steroids-js - v3.5.14 - 2015-08-17 12:34 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -3943,9 +3943,17 @@ PostMessage = (function() {
     var original;
     original = win.postMessage;
     return function() {
-      var args;
+      var args, e;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return original.apply(win, args);
+      if (args.length && (args[1] == null)) {
+        args[1] = "*";
+      }
+      try {
+        return original.apply(win, args);
+      } catch (_error) {
+        e = _error;
+        return console.log("Could not pass postMessage to original window.postMessage: " + e, args[0]);
+      }
     };
   })(window);
 
@@ -3980,7 +3988,7 @@ PostMessage = (function() {
 ;var _this = this;
 
 window.steroids = {
-  version: "3.5.13",
+  version: "3.5.14",
   Animation: Animation,
   File: File,
   views: {
