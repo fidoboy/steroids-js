@@ -1,4 +1,4 @@
-/*! steroids-js - v3.5.15 - 2015-09-29 16:15 */
+/*! steroids-js - v3.5.16 - 2015-10-01 13:45 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -790,12 +790,15 @@ Events = (function() {
   return Events;
 
 }).call(this);
-;var EventsSupport;
+;var EventsSupport,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 EventsSupport = (function() {
   function EventsSupport(prefixName, validEvents) {
     this.prefixName = prefixName;
     this.validEvents = validEvents;
+    this.off = __bind(this.off, this);
+    this.on = __bind(this.on, this);
   }
 
   EventsSupport.eventCounter = Date.now();
@@ -2752,7 +2755,7 @@ WebView = (function(_super) {
     if (options == null) {
       options = {};
     }
-    WebView.__super__.constructor.call(this, "webview", ["created", "preloaded", "unloaded"]);
+    WebView.__super__.constructor.call(this, "webview", ["created", "preloaded", "unloaded", "blocked"]);
     this.location = options.constructor.name === "String" ? options : options.location;
     if (options._parameters != null) {
       this.setParams(options._parameters);
@@ -4147,7 +4150,7 @@ Spinner = (function() {
 ;var _this = this;
 
 window.steroids = {
-  version: "3.5.15",
+  version: "3.5.16",
   Animation: Animation,
   File: File,
   views: {
