@@ -1,4 +1,4 @@
-/*! steroids-js - v3.5.16 - 2015-10-01 13:45 */
+/*! steroids-js - v3.5.17 - 2015-11-13 16:44 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -628,7 +628,7 @@ Events = (function() {
       msg: "dispatched visibilitychanged"
     });
     visibilityChangeCustomEvent = document.createEvent("CustomEvent");
-    visibilityChangeCustomEvent.initCustomEvent("visibilitychange", true, true);
+    visibilityChangeCustomEvent.initCustomEvent("visibilitychange", true, true, {});
     return document.dispatchEvent(visibilityChangeCustomEvent);
   };
 
@@ -4150,7 +4150,7 @@ Spinner = (function() {
 ;var _this = this;
 
 window.steroids = {
-  version: "3.5.16",
+  version: "3.5.17",
   Animation: Animation,
   File: File,
   views: {
