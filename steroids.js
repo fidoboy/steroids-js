@@ -1,4 +1,4 @@
-/*! steroids-js - v3.5.21 - 2016-12-08 17:39 */
+/*! steroids-js - v3.5.22 - 2017-03-29 16:08 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -4137,7 +4137,7 @@ Spinner = (function() {
 ;var _this = this;
 
 window.steroids = {
-  version: "3.5.21",
+  version: "3.5.22",
   Animation: Animation,
   File: File,
   views: {
@@ -4228,6 +4228,8 @@ window.steroids = {
     }
   }
 };
+
+window.steroids.Bridge = Bridge;
 
 window.steroids.nativeBridge = Bridge.getBestNativeBridge();
 
