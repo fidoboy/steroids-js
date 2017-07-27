@@ -1,4 +1,4 @@
-/*! steroids-js - v3.5.22 - 2017-03-29 16:08 */
+/*! steroids-js - v3.5.23 - 2017-07-27 11:46 */
 (function(window){
 var Bridge,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -4060,7 +4060,7 @@ PostMessage = (function() {
       var e, message;
       message = JSON.parse(unescape(escapedJSONMessage));
       e = document.createEvent("MessageEvent");
-      e.initMessageEvent("message", false, false, message, "", "", window, null);
+      e.initMessageEvent("message", false, false, message, "", "", window, []);
       return window.dispatchEvent(e);
     }, 1);
   };
@@ -4137,7 +4137,7 @@ Spinner = (function() {
 ;var _this = this;
 
 window.steroids = {
-  version: "3.5.22",
+  version: "3.5.23",
   Animation: Animation,
   File: File,
   views: {
